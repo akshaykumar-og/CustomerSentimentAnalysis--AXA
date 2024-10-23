@@ -1,0 +1,54 @@
+from google.colab import files
+import os
+import zipfile
+
+# Uploadin files
+uploaded = files.upload()
+
+# Check if the uploaded file 'transcripts_v3.zip' is present then unzip it
+if 'transcripts_v3.zip' in uploaded:
+    os.makedirs('/content/transcripts', exist_ok=True)
+    with zipfile.ZipFile('transcripts_v3.zip', 'r') as zip_ref:
+        zip_ref.extractall('/content/transcripts')
+    print("Files extracted successfully!")
+else:
+    print("File not found. Please check the file name and try uploading again.")
+
+#Analysis/Findings: This step involves handling file uploads in a Google Colab environment and successfully extracting the uploaded zip file containing transcripts.
+#It sets the stage for data preprocessing by ensuring all required files are available and accessible in the environment. 
+#The output confirms whether the files have been successfully extracted, indicating readiness for further processing.
+
+transcripts_dir = '/content/transcripts/transcripts_v3/'
+transcript_files = os.listdir(transcripts_dir)
+print("Files in the transcripts directory:", transcript_files[:10])
+
+#Analysis/Findings: This script confirms the presence and lists the first ten transcript files, which helps in verifying the correct upload and extraction of the data. 
+#This step is crucial for debugging early stages of the data pipeline to ensure that file paths and directories are correctly set up.
+
+def extract_customer_dialogues(transcript_path):
+    with open(transcript_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+        customer_dialogues = re.findall(r'Member: (.*?)\n', content, re.DOTALL)
+    return customer_dialogues
+#Analysis/Findings: This function extracts only the customer's side of dialogues from each transcript. 
+#It's tailored to identify and isolate the customer's contributions, which are critical for analyzing customer sentiment accurately without interference from the agent’s responses.
+#This targeted extraction is fundamental for focusing the sentiment analysis specifically on customer feedback and concerns.
+
+from transformers import pipeline
+sentiment_analyzer = pipeline("sentiment-analysis")
+sentiments = sentiment_analyzer(all_customer_responses[:100])  # Example: analyze first 100 responses
+
+#Analysis/Findings: This segment loads a pre-trained sentiment analysis model and applies it to a subset of customer dialogues. 
+#The sentiment analyzer categorizes each response into positive, negative, or neutral sentiments. 
+#The results here provide a preliminary insight into the general sentiment trends within the customer interactions. 
+#These results are crucial for understanding the overall customer satisfaction and can guide improvements in customer service strategies.
+
+# Example of processing results
+for response, sentiment in zip(all_customer_responses[:100], sentiments):
+    print(f"Response: {response}\nSentiment: {sentiment}\n")
+#Analysis/Findings: This final part of the code iterates through the responses and their analyzed sentiments, printing them out to provide a clear and immediate view of the analysis results. 
+#This visualization helps in quickly identifying patterns or issues in customer interactions, such as frequent negative sentiments around certain topics, which could indicate areas requiring attention.
+
+
+
+
