@@ -18,3 +18,14 @@ Python 3.x along with the packages listed in `requirements.txt`.
 2. Install required packages:
    ```bash
    pip install -r requirements.txt
+## Conclusion
+The project effectively demonstrates how to use modern NLP tools to derive insights from customer service transcripts. 
+The analysis highlights areas where customer sentiment is predominantly negative, suggesting potential improvements or further investigation. 
+Additionally, understanding where the sentiment is positive can help reinforce effective practices already in place.
+
+
+
+
+
+
+
