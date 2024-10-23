@@ -1,0 +1,13 @@
+# test_sentiment_analysis.py
+import unittest
+from src.sentiment_analysis import analyze_sentiments
+
+class TestSentimentAnalysis(unittest.TestCase):
+    def test_output_type(self):
+        test_input = ["This is great!", "Not happy with this."]
+        results = analyze_sentiments(test_input)
+        self.assertIsInstance(results, list)  # Check if the output is a list
+        self.assertEqual(len(results), 2)  # Check if output length matches input
+
+if __name__ == '__main__':
+    unittest.main()
